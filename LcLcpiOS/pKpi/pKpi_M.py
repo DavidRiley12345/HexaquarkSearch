@@ -2,12 +2,16 @@ import ROOT as r
 import math
 import sys
 
+r.EnableImplicitMT()
+
 filename = __file__.replace('.py','')
 
 #use the lhcbstyle guide - comment out if not needed
 r.gROOT.ProcessLine(".x /home/ppe/d/driley/lhcbStyle.C")
 r.gROOT.ForceStyle()
 
+currstyle = r.gROOT.GetStyle("lhcbStyle")
+currstyle.SetOptTitle(1)
 
 #load file names into a string to be read into dataframe
 names = r.std.vector('string')()
@@ -25,25 +29,32 @@ df4 = df3.Filter("Lambdacp_pi_ProbNNpi > 0.4")
 
 
 #create histogram model and fill using the data from the desired column
-model_M_K_P = r.RDF.TH1DModel("{}".format(filename), "{}".format(filename), 150,2150.,2430.);
+model_M_K_P = r.RDF.TH1DModel("{}".format(filename), "{}".format(filename), 100,2170.,2400.);
 
-h = df1.Histo1D(model_M_K_P, "Lambdacp_invMass");
-ProbNNcuts = df4.Histo1D(model_M_K_P, "Lambdacp_invMass");
-
+h = df4.Histo1D(model_M_K_P, "Lambdacp_invMass");
 
 hist=h.Clone();
-hist.SetTitle("OS pKpi Invariant Mass");
+hist.SetTitle("#font[12]{pK#pi Invariant Mass plot (OS_Lambdacp)}")
+
+upperline = r.TLine(2300,0,2300,225000)
+upperline.SetLineStyle(2)
+
+lowerline = r.TLine(2270,0,2270,225000)
+lowerline.SetLineStyle(2)
+
+
 
 hist.GetYaxis().SetTitle("#font[12]{candidates}")
-hist.GetXaxis().SetTitle("#font[12]{pKpi invMass}[MeV]")
-
-
+hist.GetXaxis().SetTitle("#font[12]{m(pK#pi)}[MeV]") 
 c = r.TCanvas("c", "c", 650, 450)
-c.SetLeftMargin(0.12)
+c.SetLeftMargin(0.13)
 c.SetRightMargin(0.12)
+c.SetTopMargin(0.12)
 c.cd()
 
-ProbNNcuts.Draw("peSAME")
+hist.Draw("h")
+upperline.Draw()
+lowerline.Draw()
 
 #save as both png and ROOT macro
 c.SaveAs("{}.C".format(filename))
