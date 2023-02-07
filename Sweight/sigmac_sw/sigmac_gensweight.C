@@ -170,8 +170,8 @@ void MakePlots(RooWorkspace* ws){
    // and of the control variable (isolation) after unfolding with sPlot.
    std::cout << "make plots" << std::endl;
    // make our canvas
-   TCanvas* cdata = new TCanvas("sPlot","sPlot demo", 800, 800);
-   cdata->Divide(2,2);
+   TCanvas* cdata = new TCanvas("sPlot","sPlot demo", 600, 1200);
+   cdata->Divide(1,3);
    // get what we need out of the workspace
    RooAbsPdf* model = ws->pdf("model");
    RooAbsPdf* signalPDF = ws->pdf("signalPDF");
@@ -196,7 +196,7 @@ void MakePlots(RooWorkspace* ws){
    frame->SetTitle("Sigmac_M (Gaussian signal, exp bkg");
    frame->Draw();
    
-   cdata->cd(3);
+   cdata->cd(2);
    data->get()->Print("v");
    RooPlot* frame1 = Sigmac_M->frame();
    data->plotOnXY(frame1, YVar(*nsig_sw),MarkerColor(kGreen));
@@ -204,19 +204,15 @@ void MakePlots(RooWorkspace* ws){
    frame1->SetTitle("Plot of signal and bkg sweights");
    frame1->Draw();
    
-   cdata->cd(2);
+   cdata->cd(3);
    RooPlot* frame2 = pi_PT->frame();
    RooDataSet wdata_sigsw("","",data,*data->get(),nullptr,"nsig_sw");
-   wdata_sigsw.plotOn(frame2);
-   frame2->SetTitle("Transverse mom: signal weight");
-   frame2->Draw();
- 
-   cdata->cd(4);
-   RooPlot* frame3 = pi_PT->frame();
    RooDataSet wdata_bkgsw("","",data,*data->get(),nullptr,"nbkg_sw");
-   wdata_bkgsw.plotOn(frame3);
-   frame3->SetTitle("Transverse mom: bkg weight");
-   frame3->Draw();   
+   wdata_bkgsw.plotOn(frame2,MarkerColor(2),Rescale(1)); 
+   wdata_sigsw.plotOn(frame2,MarkerColor(3),Rescale(1));
+   frame2->SetTitle("BPion_PT: signal vs bkg");
+   frame2->Draw();
+   
    cdata->SaveAs("SPlot.gif");
 }
 
