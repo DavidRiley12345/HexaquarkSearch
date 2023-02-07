@@ -155,6 +155,7 @@ void AddData(RooWorkspace* ws){
    variables->add(*Lambdacp_PY);
    variables->add(*Lambdacp_PZ);
    variables->add(*totCandidates);
+   std::cout << "adding data to RooDataSet" << std::endl;
    RooDataSet *datain = new RooDataSet("","",tin,*variables);
    datain->Print("v");
    std::cout <<"---------------------------------" << std::endl;
