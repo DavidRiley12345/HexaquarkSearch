@@ -84,7 +84,7 @@ void AddModel(RooWorkspace* ws){
    RooDstD0BG bkgPDF("bkgPDF","",Sigmac_M,dm0,a,b,c);
 
    RooAddPdf model("model","",RooArgList(signalPDF,bkgPDF),RooArgList(nsig,nbkg));	 
-   RooRealVar pi_PT("pi_PT","",0,5000);
+   RooRealVar pi_PT("pi_PT","",0,2500);
    ws->import(pi_PT);
    ws->import(model);
 }
