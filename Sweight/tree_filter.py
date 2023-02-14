@@ -5,9 +5,14 @@ from array import array
 
 filename = __file__.replace('.py','')
 
-fin = r.TFile.Open('/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root')
-tin = fin.Get('B2LcLcpiOS/DecayTree')
-df0 = r.RDataFrame(tin)
+#fin = r.TFile.Open('/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root')
+#tin = fin.Get('B2LcLcpiOS/DecayTree')
+
+names = r.std.vector("string")()
+
+for n in ['/data/lhcb01/mwhitehead/LcLcpi_2018_MU.root','/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root','/data/lhcb01/mwhitehead/LcLcpi_2017_MU.root','/data/lhcb01/mwhitehead/LcLcpi_2017_MD.root']: names.push_back(n)
+
+df0 = r.RDataFrame("B2LcLcpiOS/DecayTree",names)
 df1 = df0.Define("Lambdacp_invMass","Lambdacp_M")
 df11= df1.Filter("Lambdacp_M < 2350 && Lambdacp_M > 2220")
 df2 = df11.Filter("Lambdacp_K_ProbNNk > 0.4 && Lambdacm_K_ProbNNk > 0.4 && Lambdacp_p_ProbNNp > 0.4 && Lambdacm_p_ProbNNp > 0.4 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4")
