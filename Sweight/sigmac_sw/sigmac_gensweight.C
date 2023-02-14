@@ -52,7 +52,7 @@ void sigmac_gensweight()
 //____________________________________
 void AddModel(RooWorkspace* ws){
 
-   RooRealVar Sigmac_M("Sigmac_M","",2390.0,2700.0);
+   RooRealVar Sigmac_M("Sigmac_M","",2390.0,3000.0);
    RooRealVar nsig("nsig","",10000,1,1000000);
    RooRealVar nbkg("nbkg","",100000,1,10000000);
 
@@ -77,7 +77,7 @@ void AddModel(RooWorkspace* ws){
 
    //add a background model, we found this function seemed to fit well, in future could be a good idea to use the 
    //sweighted background in the sigma plots to model background, but this shape will do here
-   RooRealVar dm0("dm0","",2420); 
+   RooRealVar dm0("dm0","",2300,2450); 
    RooRealVar a("a","",100000,0,10000000);
    RooRealVar b("b","",-0.005,-4,0.);
    RooRealVar c("c","",-0.005,-4,0.);
@@ -97,11 +97,13 @@ void AddData(RooWorkspace* ws){
    //TFile* fin = TFile :: Open("/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root");
    //TTree* tin = (TTree*)fin->Get("B2LcLcpiOS/DecayTree");
    std::cout << "adding sigmac_M to tree:" << std::endl;
-   ROOT::RDataFrame df1("B2LcLcpiOS/DecayTree","/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root");
+   std::vector<std::string> files = {"/data/lhcb01/mwhitehead/LcLcpi_2018_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MD.root"};
+   ROOT::RDataFrame df1("B2LcLcpiOS/DecayTree",files);
+   
    std::cout << "opening tree as RDataFrame to define and filter" << std::endl;
    auto df2 = df1.Define("Sigmac_M","sqrt(pow(pi_PE + Lambdacp_PE,2) - pow(pi_PX + Lambdacp_PX,2) - pow(pi_PY + Lambdacp_PY,2) - pow(pi_PZ + Lambdacp_PZ,2))");
    std::cout << "defined: filtering ..." << std::endl;
-   auto df3 = df2.Filter("Lambdacp_K_ProbNNk > 0.4 && Lambdacm_K_ProbNNk > 0.4 && Lambdacp_p_ProbNNp > 0.4 && Lambdacm_p_ProbNNp > 0.4 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4 && (Lambdacp_M < 2350 && Lambdacp_M > 2220)");
+   auto df3 = df2.Filter("Lambdacp_K_ProbNNk > 0.4 && Lambdacm_K_ProbNNk > 0.4 && Lambdacp_p_ProbNNp > 0.4 && Lambdacm_p_ProbNNp > 0.4 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4 && (Lambdacp_M < 2300 && Lambdacp_M > 2270)");
    df3.Snapshot("sigmac","/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigmac_sw/sigmac.root",{"Sigmac_M","pi_PT"});
    std::cout << "snapshot saved" << std::endl;
    TFile* fin = TFile :: Open("/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigmac_sw/sigmac.root");
