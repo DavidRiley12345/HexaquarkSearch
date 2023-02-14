@@ -10,7 +10,7 @@ using namespace RooFit;
 
 int sigc_simpler() {
    // Create a RooRealVar for the mass variable
-   RooRealVar sig_M("sig_M","",2350.0,3200.0);
+   RooRealVar sig_M("sig_M","",2350.0,3000.0);
 
    // Create background PDF variables
    RooRealVar dm0("dm0","",2350,2350,2500);
