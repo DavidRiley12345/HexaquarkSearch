@@ -27,6 +27,10 @@ col_list.push_back('Lambdacp_M')
 col_list.push_back('Lambdacp_P')
 col_list.push_back('Lambdacp_PT')
 
+col_list.push_back('Lambdacm_M')
+col_list.push_back('Lambdacm_P')
+col_list.push_back('Lambdacm_PT')
+
 col_list.push_back('Lambdacp_p_P')
 col_list.push_back('Lambdacp_p_PT')
 
@@ -47,6 +51,11 @@ col_list.push_back('Lambdacp_PE')
 col_list.push_back('Lambdacp_PX')
 col_list.push_back('Lambdacp_PY')
 col_list.push_back('Lambdacp_PZ')
+
+col_list.push_back('Lambdacm_PE')
+col_list.push_back('Lambdacm_PX')
+col_list.push_back('Lambdacm_PY')
+col_list.push_back('Lambdacm_PZ')
 
 col_list.push_back('totCandidates')
 

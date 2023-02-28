@@ -63,7 +63,9 @@ void AddModel(RooWorkspace* ws){
 
    RooAddPdf model("model","",RooArgList(gaussianSig,bkgPDF),RooArgList(nsig,nbkg));
    
-
+   RooRealVar Lambdacm_M("Lambdacm_M","",2220.0,2350.0);
+   RooRealVar Lamndacm_P("Lambdacm_P","Lambdacm_P",0,450000);
+   RooRealVar Lambdacm_PT("Lambdacm_PT","Lambdacm_PT",0,30000); 
    RooRealVar Lambdacp_P("Lambdacp_P","Lambdacp_P",0,450000);
    RooRealVar Lambdacp_PT("Lambdacp_PT","Lambdacp_PT",0,30000);
    RooRealVar Lambdacp_p_P("Lambdacp_p_P","Lambdacp_p_P",0,220000);
@@ -78,6 +80,10 @@ void AddModel(RooWorkspace* ws){
    RooRealVar pi_PX("pi_PX","pi_PX",-10000,10000);
    RooRealVar pi_PY("pi_PY","pi_PY",-10000,10000);
    RooRealVar pi_PZ("pi_PZ","pi_PZ",0,220000);
+   RooRealVar Lambdacm_PE("Lambdacm_PE","Lambdacm_PE",0,450000);
+   RooRealVar Lambdacm_PX("Lambdacm_PX","Lambdacm_PX",-30000,30000);
+   RooRealVar Lambdacm_PY("Lambdacm_PY","Lambdacm_PY",-30000,30000);
+   RooRealVar Lambdacm_PZ("Lambdacm_PZ","Lambdacm_PZ",0,450000); 
    RooRealVar Lambdacp_PE("Lambdacp_PE","Lambdacp_PE",0,450000);
    RooRealVar Lambdacp_PX("Lambdacp_PX","Lambdacp_PX",-30000,30000);
    RooRealVar Lambdacp_PY("Lambdacp_PY","Lambdacp_PY",-30000,30000);
@@ -101,6 +107,10 @@ void AddModel(RooWorkspace* ws){
    ws->import(Lambdacp_PX);
    ws->import(Lambdacp_PY);
    ws->import(Lambdacp_PZ);
+   ws->import(Lambdacm_PE);
+   ws->import(Lambdacm_PX);
+   ws->import(Lambdacm_PY);
+   ws->import(Lambdacm_PZ);
    ws->import(totCandidates);
    ws->import(model);
 }
@@ -132,6 +142,10 @@ void AddData(RooWorkspace* ws){
    RooRealVar* Lambdacp_PX = ws->var("Lambdacp_PX");
    RooRealVar* Lambdacp_PY = ws->var("Lambdacp_PY");
    RooRealVar* Lambdacp_PZ = ws->var("Lambdacp_PZ"); 
+   RooRealVar* Lambdacm_PE = ws->var("Lambdacm_PE");
+   RooRealVar* Lambdacm_PX = ws->var("Lambdacm_PX");
+   RooRealVar* Lambdacm_PY = ws->var("Lambdacm_PY");
+   RooRealVar* Lambdacm_PZ = ws->var("Lambdacm_PZ");
    RooRealVar* totCandidates = ws->var("totCandidates");
    std::cout << ws->allVars() << std::endl;
    auto variables = new RooArgSet();
@@ -154,6 +168,10 @@ void AddData(RooWorkspace* ws){
    variables->add(*Lambdacp_PX);
    variables->add(*Lambdacp_PY);
    variables->add(*Lambdacp_PZ);
+   variables->add(*Lambdacm_PE);
+   variables->add(*Lambdacm_PX);
+   variables->add(*Lambdacm_PY);
+   variables->add(*Lambdacm_PZ);
    variables->add(*totCandidates);
    std::cout << "adding data to RooDataSet" << std::endl;
    RooDataSet *datain = new RooDataSet("","",tin,*variables);
