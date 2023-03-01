@@ -55,7 +55,7 @@ void AddModel(RooWorkspace* ws){
 
    RooRealVar Sigmac_M("Sigmac_M","",2390.0,3000.0);
    RooRealVar nsig("nsig","",10000,1,1000000);
-   RooRealVar nbkg("nbkg","",100000,1,10000000);
+   RooRealVar nbkg("nbkg","",00000,1,10000000);
 
    //create a two gaussian PDF, one for the each of the two sigmac masses we observed
 
@@ -78,18 +78,46 @@ void AddModel(RooWorkspace* ws){
 
    //add a background model, we found this function seemed to fit well, in future could be a good idea to use the 
    //sweighted background in the sigma plots to model background, but this shape will do here
-   RooRealVar dm0("dm0","",2359.94); 
-   RooRealVar a("a","",1000);
-   RooRealVar b("b","",-5.94);
-   RooRealVar c("c","",-0.092);
-   RooDstD0BG bkgPDF("bkgPDF","",Sigmac_M,dm0,a,b,c);
+   // RooRealVar dm0("dm0","",2359.94); 
+   // RooRealVar a("a","",1000);
+   // RooRealVar b("b","",-5.94);
+   // RooRealVar c("c","",-0.092);
+   // RooDstD0BG bkgPDF("bkgPDF","",Sigmac_M,dm0,a,b,c);
 
+   RooRealVar sig_M("sig_M","",2350.0,3000.0);
+
+   // reads in a dataset from a root file created by 
+
+   RooDataSet* data = RooDataSet::read("/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigc_bkg_fit/hist.root",RooArgList(sig_M));
+
+   TH1* bkgTH1Hist = data->createHistogram("bkgHist",sig_M,Binning(50));
+   
+   RooDataHist *bkgHist = new RooDataHist("bkgHist","",RooArgList(sig_M),bkgTH1Hist);   
+
+   RooHistPdf *bkgPDF = new RooHistPdf("bkgPDF","",sig_M,*bkgHist,2);
+
+   // this code should plot the bkgPDF we just created
+
+   RooPlot* frame = sig_M.frame();
+   bkgPDF->plotOn(frame);
+   TCanvas* c = new TCanvas("c","c",800,600);
+   frame->Draw();
+   c->SaveAs("bkgPDF.png");
+   
+   //RooKeysPdf bkgPDF("bkgPDF","",sig_M,*data,RooKeysPdf::MirrorBoth,2.0);
+   
    //TFile infile("/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigc_bkg_fit/pdf.root");
    //RooWorkspace* workspace = (RooWorkspace*)infile.Get("workspace");
    
    //RooKeysPdf* bkgPDF = (RooKeysPdf*)workspace->pdf("keysPDF");  
    
-   RooAddPdf model("model","",RooArgList(signalPDF,bkgPDF),RooArgList(nsig,nbkg));	 
+   // in this piece of code we create a model that is the sum of the signal and background models
+   // we also want to stop the fitTo from varying the sig_M variable, since that should only be used for creating the bkgPDF
+
+   sig_M.setConstant(kTRUE);
+
+   RooAddPdf model("model","",RooArgList(signalPDF,*bkgPDF),RooArgList(nsig,nbkg));	
+   
    RooRealVar pi_PT("pi_PT","",0,2500);
    RooRealVar lclcpi_M("lclcpi_M","",4500,6000);
    ws->import(lclcpi_M);
@@ -109,7 +137,7 @@ void AddData(RooWorkspace* ws){
    
    std::cout << "adding sigmac_M to tree:" << std::endl;
    std::vector<std::string> files = {"/data/lhcb01/mwhitehead/LcLcpi_2018_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MD.root"};
-   ROOT::RDataFrame df1("B2LcLcpiSS/DecayTree",files);
+   ROOT::RDataFrame df1("B2LcLcpiOS/DecayTree",files);
    
    std::cout << "opening tree as RDataFrame to define and filter" << std::endl;
    auto df2 = df1.Define("Sigmac_M","sqrt(pow(pi_PE + Lambdacp_PE,2) - pow(pi_PX + Lambdacp_PX,2) - pow(pi_PY + Lambdacp_PY,2) - pow(pi_PZ + Lambdacp_PZ,2))");
