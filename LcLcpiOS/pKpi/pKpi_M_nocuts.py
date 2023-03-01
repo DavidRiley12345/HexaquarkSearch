@@ -2,7 +2,7 @@ import ROOT as r
 import math
 import sys
 
-r.EnableImplicitMT()
+
 
 filename = __file__.replace('.py','')
 
@@ -14,9 +14,7 @@ currstyle = r.gROOT.GetStyle("lhcbStyle")
 currstyle.SetOptTitle(1)
 #currstyle.SetTitleW(0.)
 #currstyle.SetTitleH(0.1)
-
-currstyle.SetMarkerSize(1)
-currstyle.SetMarkerStyle(1)
+ 
 
 #load file names into a string to be read into dataframe
 names = r.std.vector('string')()
@@ -28,7 +26,7 @@ df0 = r.RDataFrame('B2LcLcpiOS/DecayTree',names)
 df1 = df0.Define("Lambdacp_invMass", "sqrt(pow(Lambdacp_p_PE+Lambdacp_K_PE+Lambdacp_pi_PE,2)-pow(Lambdacp_p_PX+Lambdacp_K_PX+Lambdacp_pi_PX,2)-pow(Lambdacp_p_PY+Lambdacp_K_PY+Lambdacp_pi_PY,2)-pow(Lambdacp_p_PZ+Lambdacp_K_PZ+Lambdacp_pi_PZ,2))")
 
 #create histogram model and fill using the data from the desired column
-model_M_K_P = r.RDF.TH1DModel("{}".format(filename), "{}".format(filename), 1000,2170.,2400.);
+model_M_K_P = r.RDF.TH1DModel("{}".format(filename), "{}".format(filename), 100,2170.,2400.);
 
 h = df1.Histo1D(model_M_K_P, "Lambdacp_invMass");
 
@@ -42,14 +40,15 @@ lowerline = r.TLine(2270,0,2270,225000)
 lowerline.SetLineStyle(2)
 
 hist.GetYaxis().SetTitle("#font[12]{candidates}")
-hist.GetXaxis().SetTitle("#font[12]{m(pK#pi)}[MeV]") 
+hist.GetXaxis().SetTitle("#font[12]{m(pK#pi)}[MeV]")
+hist.GetYaxis().SetTitleOffset(1.2) 
 c = r.TCanvas("c", "c", 1300, 900)
-c.SetLeftMargin(0.18)
+c.SetLeftMargin(0.16)
 c.SetRightMargin(0.12)
 c.SetTopMargin(0.12)
 c.cd()
 
-hist.Draw("e1")
+hist.Draw("h")
 #save as both png and ROOT macro
 c.SaveAs("{}.C".format(filename))
 c.SaveAs("{}.png".format(filename))

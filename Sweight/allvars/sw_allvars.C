@@ -23,9 +23,12 @@ using namespace RooStats;
 
 void sw_allvar_makesig_M(){
    ROOT::RDataFrame d("weightedtree","/home/ppe/d/driley/git_HexaquarkSummer/Sweight/weighted.root");
-   auto d_new = d.Define("sig_M","sqrt(pow(pi_PE + Lambdacp_PE,2) - pow(pi_PX + Lambdacp_PX,2) - pow(pi_PY + Lambdacp_PY,2) - pow(pi_PZ + Lambdacp_PZ,2))");
-   d_new.Snapshot("weightedtree","/home/ppe/d/driley/git_HexaquarkSummer/Sweight/allvars/weighted.root");
+   auto d_new1 = d.Define("sig_M","sqrt(pow(pi_PE + Lambdacp_PE,2) - pow(pi_PX + Lambdacp_PX,2) - pow(pi_PY + Lambdacp_PY,2) - pow(pi_PZ + Lambdacp_PZ,2))");
+   auto d_new2 = d_new1.Define("lclcpi_M","sqrt(pow(pi_PE + Lambdacp_PE + Lambdacm_PE,2) - pow(pi_PX + Lambdacp_PX + Lambdacm_PX,2) - pow(pi_PY + Lambdacp_PY + Lambdacm_PY,2) - pow(pi_PZ + Lambdacp_PZ + Lambdacm_PZ,2))");
+   d_new2.Snapshot("weightedtree","/home/ppe/d/driley/git_HexaquarkSummer/Sweight/allvars/weighted.root");
 } 
+
+
 
 void sw_allvars()
 { 
@@ -35,10 +38,10 @@ void sw_allvars()
   TTree* tree = (TTree*)fin->Get("weightedtree");
 
   // Variables and their ranges
-  const int nVars = 19;
-  string vars[nVars] = {"sig_M", "Lambdacp_M", "Lambdacp_P", "Lambdacp_PT", "Lambdacp_p_P", "Lambdacp_p_PT","Lambdacp_K_P", "Lambdacp_K_PT", "Lambdacp_pi_P", "Lambdacp_pi_PT", "pi_P","pi_PT","pi_PX", "pi_PY", "pi_PZ", "Lambdacp_PX", "Lambdacp_PY", "Lambdacp_PZ","totCandidates"};
-  double minVals[nVars] = {2350,         2220,            0,             0,              0,               0,             0,               0,               0,                0,      0,      0, -10000,  -10000,       0,        -30000,        -30000,     0,0 };
-  double maxVals[nVars] = {3000,         2360,       250000,         20000,         120000,           10000,        100000,           6000,          60000,           6000, 30000,   3000,  10000,   10000,  220000,         30000,         30000,    450000,1000 };
+  const int nVars = 20;
+  string vars[nVars] = {"lclcpi_M","sig_M", "Lambdacp_M", "Lambdacp_P", "Lambdacp_PT", "Lambdacp_p_P", "Lambdacp_p_PT","Lambdacp_K_P", "Lambdacp_K_PT", "Lambdacp_pi_P", "Lambdacp_pi_PT", "pi_P","pi_PT","pi_PX", "pi_PY", "pi_PZ", "Lambdacp_PX", "Lambdacp_PY", "Lambdacp_PZ","totCandidates"};
+  double minVals[nVars] = {4500, 2350,         2220,            0,             0,              0,               0,             0,               0,               0,                0,      0,      0, -10000,  -10000,       0,        -30000,        -30000,     0,0 };
+  double maxVals[nVars] = {10000, 3000,         2360,       250000,         20000,         120000,           10000,        100000,           6000,          60000,           6000, 30000,   3000,  10000,   10000,  220000,         30000,         30000,    450000,1000 };
 
   // Loop over variables
   for (int i = 0; i < nVars; i++) {

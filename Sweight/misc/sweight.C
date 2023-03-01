@@ -21,12 +21,15 @@ using namespace RooStats;
 
 // see below for implementation
 
+
+
 void AddModel(RooWorkspace*);
 void AddData(RooWorkspace*);
 void DoSPlot(RooWorkspace*);
 void MakePlots(RooWorkspace*);
 void sweight()
 {
+   ROOT::EnableImplicitMT(); 
    // Create a new workspace to manage the project.
    RooWorkspace* wspace = new RooWorkspace("myWS");
    std::cout << "Wkspace made" << std::endl; 
@@ -71,8 +74,8 @@ void AddModel(RooWorkspace* ws){
 void AddData(RooWorkspace* ws){
    // Add a toy dataset
    // how many events do we want?
-   TFile* fin = TFile :: Open("/home/ppe/d/driley/LcLcpiOS/Sweight/cut.root");
-   TTree* tin = (TTree*)fin->Get("Lcm_cut");
+   TFile* fin = TFile :: Open("/home/ppe/d/driley/git_HexaquarkSummer/Sweight/cut.root");
+   TTree* tin = (TTree*)fin->Get("Lcm");
    //TFile* fin = TFile :: Open("/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root");
    //TTree* tin = (TTree*)fin->Get("B2LcLcpiOS/DecayTree");
    RooRealVar* Lambdacp_M = ws->var("Lambdacp_M");   
@@ -140,7 +143,7 @@ void MakePlots(RooWorkspace* ws){
    std::cout << "make plots" << std::endl;
    // make our canvas
    TCanvas* cdata = new TCanvas("sPlot","sPlot demo", 800, 800);
-   cdata->Divide(2,2);
+   cdata->Divide(1,3);
    // get what we need out of the workspace
    RooAbsPdf* model = ws->pdf("model");
    RooAbsPdf* gaussianSig = ws->pdf("gaussianSig");
@@ -165,7 +168,7 @@ void MakePlots(RooWorkspace* ws){
    frame->SetTitle("Lambdacp_M (Gaussian signal, exp bkg");
    frame->Draw();
    
-   cdata->cd(3);
+   cdata->cd(2);
    data->get()->Print("v");
    RooPlot* frame1 = Lambdacp_M->frame();
    data->plotOnXY(frame1, YVar(*nsig_sw),MarkerColor(kGreen));
@@ -173,19 +176,14 @@ void MakePlots(RooWorkspace* ws){
    frame1->SetTitle("Plot of signal and bkg sweights");
    frame1->Draw();
    
-   cdata->cd(2);
+   cdata->cd(3);
    RooPlot* frame2 = Lambdacp_PT->frame();
-   RooDataSet wdata_sigsw("","",data,*data->get(),nullptr,"nsig_sw");
-   wdata_sigsw.plotOn(frame2);
-   frame2->SetTitle("Transverse mom: signal weight");
-   frame2->Draw();
- 
-   cdata->cd(4);
-   RooPlot* frame3 = Lambdacp_PT->frame();
    RooDataSet wdata_bkgsw("","",data,*data->get(),nullptr,"nbkg_sw");
-   wdata_bkgsw.plotOn(frame3);
-   frame3->SetTitle("Transverse mom: bkg weight");
-   frame3->Draw();   
+   RooDataSet wdata_sigsw("","",data,*data->get(),nullptr,"nsig_sw");
+   wdata_bkgsw.plotOn(frame2,MarkerColor(kRed));
+   wdata_sigsw.plotOn(frame2,MarkerColor(kGreen));
+   frame2->SetTitle("Lcm_PT sig vs bkg");
+   frame2->Draw();
    cdata->SaveAs("SPlot.gif");
 }
 
