@@ -43,17 +43,17 @@ void sigmac_gensweight()
    //  wspace->Print();
    // do sPlot.
    //This wil make a new dataset with sWeights added for every event.
-   DoSPlot(wspace);
+   //DoSPlot(wspace);
    // Make some plots showing the discriminating variable and
    // the control variable after unfolding.
-   MakePlots(wspace);
+   //MakePlots(wspace);
    // cleanup
    delete wspace;
 }
 //____________________________________
 void AddModel(RooWorkspace* ws){
 
-   RooRealVar Sigmac_M("Sigmac_M","",2390.0,3000.0);
+   RooRealVar sig_M("sig_M","",2390.0,3000.0);
    RooRealVar nsig("nsig","",10000,1,1000000);
    RooRealVar nbkg("nbkg","",00000,1,10000000);
 
@@ -61,11 +61,11 @@ void AddModel(RooWorkspace* ws){
 
    RooRealVar  gauss1Mean("gauss1Mean","",2453.75,2453.,2455.);
    RooRealVar  gauss1Std("gauss1Std","",0.1,15.0);
-   RooGaussian gaussian1Sig("gaussian1Sig","",Sigmac_M,gauss1Mean,gauss1Std);
+   RooGaussian gaussian1Sig("gaussian1Sig","",sig_M,gauss1Mean,gauss1Std);
 
    RooRealVar gauss2Mean("gauss2Mean","",2518.4,2500.,2525);
    RooRealVar gauss2Std("gauss2Std","",0.1,15);
-   RooGaussian gaussian2Sig("gaussian2Sig","",Sigmac_M,gauss2Mean,gauss2Std);
+   RooGaussian gaussian2Sig("gaussian2Sig","",sig_M,gauss2Mean,gauss2Std);
 
    //mixing parameters for the two gaussians
    
@@ -82,9 +82,8 @@ void AddModel(RooWorkspace* ws){
    // RooRealVar a("a","",1000);
    // RooRealVar b("b","",-5.94);
    // RooRealVar c("c","",-0.092);
-   // RooDstD0BG bkgPDF("bkgPDF","",Sigmac_M,dm0,a,b,c);
+   // RooDstD0BG bkgPDF("bkgPDF","",sig_M,dm0,a,b,c);
 
-   RooRealVar sig_M("sig_M","",2350.0,3000.0);
 
    // reads in a dataset from a root file created by 
 
@@ -135,24 +134,25 @@ void AddData(RooWorkspace* ws){
    
    // FOLLOWING BLOCK defines sigma_c in the tree, only re run to change filters etc
    
-   std::cout << "adding sigmac_M to tree:" << std::endl;
+   std::cout << "adding sig_M to tree:" << std::endl;
    std::vector<std::string> files = {"/data/lhcb01/mwhitehead/LcLcpi_2018_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MD.root"};
    ROOT::RDataFrame df1("B2LcLcpiOS/DecayTree",files);
    
    std::cout << "opening tree as RDataFrame to define and filter" << std::endl;
-   auto df2 = df1.Define("Sigmac_M","sqrt(pow(pi_PE + Lambdacp_PE,2) - pow(pi_PX + Lambdacp_PX,2) - pow(pi_PY + Lambdacp_PY,2) - pow(pi_PZ + Lambdacp_PZ,2))");
+   auto df2 = df1.Define("sig_M","sqrt(pow(pi_PE + Lambdacp_PE,2) - pow(pi_PX + Lambdacp_PX,2) - pow(pi_PY + Lambdacp_PY,2) - pow(pi_PZ + Lambdacp_PZ,2))");
    auto df3 = df2.Define("lclcpi_M","sqrt(pow(Lambdacp_PE + Lambdacm_PE + pi_PE,2)-pow(Lambdacp_PX + Lambdacm_PX + pi_PX,2)-pow(Lambdacp_PY + Lambdacm_PY + pi_PY,2)-pow(Lambdacp_PZ + Lambdacm_PZ + pi_PZ,2))");
    std::cout << "defined: filtering ..." << std::endl;
-   auto df4 = df3.Filter("(Lambdacp_M < 2305 && Lambdacp_M > 2270) && (Lambdacm_M < 2305 && Lambdacm_M > 2270) && Lambdacp_K_ProbNNk > 0.4 && Lambdacm_K_ProbNNk > 0.4 && Lambdacp_p_ProbNNp > 0.4 && Lambdacm_p_ProbNNp > 0.4 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4");
-   df4.Snapshot("sigmac","/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigmac_sw/sigmac.root",{"Sigmac_M","lclcpi_M"});
+   auto df4 = df3.Filter("(Lambdacp_M > 2235 && Lambdacp_M < 2335) && Lambdacp_K_ProbNNk > 0.6 && Lambdacm_K_ProbNNk > 0.6 && Lambdacp_p_ProbNNp > 0.7 && Lambdacm_p_ProbNNp > 0.7 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4");
+   df4.Snapshot("sigmac","/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigmac_sw/sigmac.root",{"sig_M","lclcpi_M"});
    std::cout << "snapshot saved" << std::endl;
+   
    TFile* fin = TFile :: Open("/home/ppe/d/driley/git_HexaquarkSummer/Sweight/sigmac_sw/sigmac.root");
    TTree* tin = (TTree*)fin->Get("sigmac");
-   RooRealVar* Sigmac_M = ws->var("Sigmac_M");   
+   RooRealVar* sig_M = ws->var("sig_M");   
    RooRealVar* lclcpi_M = ws->var("lclcpi_M");
    //RooRealVar* pi_PT = ws->var("pi_PT"); 
    std::cout << ws->allVars() << std::endl;
-   RooDataSet *datain = new RooDataSet("","",tin,RooArgSet(*Sigmac_M,*lclcpi_M));
+   RooDataSet *datain = new RooDataSet("","",tin,RooArgSet(*sig_M,*lclcpi_M));
    datain->Print("v");
    std::cout <<"---------------------------------" << std::endl;
  
@@ -183,8 +183,7 @@ void DoSPlot(RooWorkspace* ws){
    RooMsgService::instance().setSilentMode(true);
    // Now we use the SPlot class to add SWeights to our data set
    // based on our model and our yield variables
-   RooStats::SPlot* sData = new RooStats::SPlot("sData","An SPlot",
-                                             *data, model, RooArgList(*nsig,*nbkg) );
+   RooStats::SPlot* sData = new RooStats::SPlot("sData","An SPlot",*data, model, RooArgList(*nsig,*nbkg) );
    // Check that our weights have the desired properties
    std::cout << "Check SWeights:" << std::endl;
    std::cout << std::endl <<  "Yield of signal is "
@@ -225,7 +224,7 @@ void MakePlots(RooWorkspace* ws){
    RooRealVar* nsig_sw = ws->var("nsig_sw");
    RooRealVar* nbkg_sw = ws->var("nbkg_sw");
    //RooRealVar* pi_PT=ws->var("pi_PT");
-   RooRealVar* Sigmac_M = ws->var("Sigmac_M");
+   RooRealVar* sig_M = ws->var("sig_M");
    RooRealVar* lclcpi_M = ws->var("lclcpi_M");
    // note, we get the dataset with sWeights
    RooDataSet* data = (RooDataSet*) ws->data("dataWithSWeights");
@@ -236,23 +235,23 @@ void MakePlots(RooWorkspace* ws){
    //  TCanvas* cdata = new TCanvas();
    cdata->cd(1);
    std::cout << "first canvas" << std::endl;
-   RooPlot* frame = Sigmac_M->frame(50) ;
+   RooPlot* frame = sig_M->frame(50) ;
    data->plotOn(frame) ;
    model->plotOn(frame) ;
    model->plotOn(frame,Components(*signalPDF),LineStyle(kDashed), LineColor(kGreen)) ;
    model->plotOn(frame,Components(*bkgPDF),LineStyle(kDashed),LineColor(kRed)) ;
    //model->plotOn(frame,Components(*keysPDF),LineStyle(kDashed),LineColor(kRed));
-   frame->SetTitle("Sigmac_M (Gaussian signal, exp bkg");
+   frame->SetTitle("sig_M (Gaussian signal, exp bkg");
    frame->Draw();
    
    cdata->cd(2);
    data->get()->Print("v");
-   RooPlot* frame1 = Sigmac_M->frame(50);
+   RooPlot* frame1 = sig_M->frame(50);
    data->plotOnXY(frame1, YVar(*nsig_sw),MarkerColor(kGreen));
    data->plotOnXY(frame1, YVar(*nbkg_sw),MarkerColor(kRed));
    frame1->SetTitle("Plot of signal and bkg sweights");
    frame1->Draw();
-   
+
    cdata->cd(3);
    //RooPlot* frame2 = pi_PT->frame();
    RooPlot* frame2 = lclcpi_M->frame(50);
