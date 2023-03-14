@@ -15,7 +15,7 @@ for n in ['/data/lhcb01/mwhitehead/LcLcpi_2018_MU.root','/data/lhcb01/mwhitehead
 df0 = r.RDataFrame("B2LcLcpiOS/DecayTree",names)
 df1 = df0.Define("Lambdacp_invMass","Lambdacp_M")
 df11= df1.Filter("Lambdacp_M < 2350 && Lambdacp_M > 2220")
-df2 = df11.Filter("Lambdacp_K_ProbNNk > 0.4 && Lambdacm_K_ProbNNk > 0.4 && Lambdacp_p_ProbNNp > 0.4 && Lambdacm_p_ProbNNp > 0.4 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4")
+df2 = df11.Filter("Lambdacp_K_ProbNNk > 0.6 && Lambdacm_K_ProbNNk > 0.6 && Lambdacp_p_ProbNNp > 0.7 && Lambdacm_p_ProbNNp > 0.7 && Lambdacp_pi_ProbNNpi > 0.4 && Lambdacm_pi_ProbNNpi > 0.4")
 
 model_LcM = r.RDF.TH1DModel("model_LcM","Lambdacp_M", 50, 2220,2350)
 
