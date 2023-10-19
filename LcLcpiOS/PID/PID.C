@@ -121,7 +121,7 @@ void PID()
   lhcbStyle->SetTitleX(0.0);
   lhcbStyle->SetTitleY(1.0); 
   lhcbStyle->SetTitleW(1.0);
-  lhcbStyle->SetTitleH(0.05);
+  lhcbStyle->SetTitleH(0.08);
   
   // look of the statistics box:
   lhcbStyle->SetStatBorderSize(0);
@@ -149,9 +149,9 @@ void PID()
 
     // create a list of variables from which to create histograms
 
-    const int nVars = 3;
+    const int nVars = 6;
 
-    string vars[nVars] = {"Lambdacp_p_ProbNNp", "Lambdacp_K_ProbNNk", "Lambdacp_pi_ProbNNpi"};
+    string vars[nVars] = {"Lambdacm_p_ProbNNp", "Lambdacm_K_ProbNNk", "Lambdacm_pi_ProbNNpi","Lambdacp_p_ProbNNp", "Lambdacp_K_ProbNNk", "Lambdacp_pi_ProbNNpi"};
 
     // create a histogram from a variable in the dataframe looping over the list
 

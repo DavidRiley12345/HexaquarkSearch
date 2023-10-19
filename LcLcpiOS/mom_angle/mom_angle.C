@@ -68,10 +68,10 @@ void mom_angle()
 
     // set the paper & margin sizes
     lhcbStyle->SetPaperSize(20,26);
-    lhcbStyle->SetPadTopMargin(0.07);
+    lhcbStyle->SetPadTopMargin(0.1);
     lhcbStyle->SetPadRightMargin(0.05); // increase for colz plots
-    lhcbStyle->SetPadBottomMargin(0.16);
-    lhcbStyle->SetPadLeftMargin(0.14);
+    lhcbStyle->SetPadBottomMargin(0.18);
+    lhcbStyle->SetPadLeftMargin(0.19);
     
     // use large fonts
     lhcbStyle->SetLegendFont(lhcbFont);
@@ -103,7 +103,7 @@ void mom_angle()
 
     // label offsets
     lhcbStyle->SetLabelOffset(0.010,"X");
-    lhcbStyle->SetLabelOffset(0.010,"Y");
+    lhcbStyle->SetLabelOffset(0.01,"Y");
 
     // by default, do not display histogram decorations:
     lhcbStyle->SetOptStat(0);  
@@ -114,17 +114,19 @@ void mom_angle()
     lhcbStyle->SetOptFit(0);
     //lhcbStyle->SetOptFit(1011); // order is probability, Chi2, errors, parameters
     //titles
+    lhcbStyle->SetTitleOffset(0.5,"T");
     lhcbStyle->SetTitleOffset(0.95,"X");
-    lhcbStyle->SetTitleOffset(0.95,"Y");
+    lhcbStyle->SetTitleOffset(1.2,"Y");
     lhcbStyle->SetTitleOffset(1.2,"Z");
     lhcbStyle->SetTitleFillColor(0);
     lhcbStyle->SetTitleStyle(0);
     lhcbStyle->SetTitleBorderSize(0);
     lhcbStyle->SetTitleFont(lhcbFont,"title");
-    lhcbStyle->SetTitleX(0.0);
-    lhcbStyle->SetTitleY(1.0); 
+    lhcbStyle->SetTitleFontSize(10);
+    lhcbStyle->SetTitleX(0);
+    lhcbStyle->SetTitleY(0.9); 
     lhcbStyle->SetTitleW(1.0);
-    lhcbStyle->SetTitleH(0.05);
+    lhcbStyle->SetTitleH(0.1);
     
     // look of the statistics box:
     lhcbStyle->SetStatBorderSize(0);
@@ -142,10 +144,13 @@ void mom_angle()
     // histogram divisions: only 5 in x to avoid label overlaps
     lhcbStyle->SetNdivisions(505,"x");
     lhcbStyle->SetNdivisions(510,"y");
+
+    lhcbStyle->SetTitleFontSize(0.1);
     
     gROOT->SetStyle("lhcbStyle");
     gROOT->ForceStyle();
       
+
     // create a dataframe
 
     ROOT::RDataFrame df("B2LcLcpiOS/DecayTree", {"/data/lhcb01/mwhitehead/LcLcpi_2018_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2018_MD.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MU.root","/data/lhcb01/mwhitehead/LcLcpi_2017_MD.root"});
@@ -173,58 +178,125 @@ void mom_angle()
 
     // now we want to plot each of these angles using the Histo1D function
 
-    auto h_angle_pp_pm = df1.Histo1D({"h_angle_pp_pm","h_angle_pp_pm",20,0,3},"angle_pp_pm");
-    auto h_angle_pp_Km = df1.Histo1D({"h_angle_pp_Km","h_angle_pp_Km",20,0,3},"angle_pp_Km");
-    auto h_angle_pp_pim = df1.Histo1D({"h_angle_pp_pim","h_angle_pp_pim",20,0,3},"angle_pp_pim");
-    auto h_angle_pp_pip = df1.Histo1D({"h_angle_pp_pip","h_angle_pp_pip",20,0,3},"angle_pp_pip");
-    auto h_angle_pp_Kp = df1.Histo1D({"h_angle_pp_Kp","h_angle_pp_Kp",20,0,3},"angle_pp_Kp");
-    auto h_angle_Kp_pm = df1.Histo1D({"h_angle_Kp_pm","h_angle_Kp_pm",20,0,3},"angle_Kp_pm");
-    auto h_angle_Kp_Km = df1.Histo1D({"h_angle_Kp_Km","h_angle_Kp_Km",20,0,3},"angle_Kp_Km");
-    auto h_angle_Kp_pim = df1.Histo1D({"h_angle_Kp_pim","h_angle_Kp_pim",20,0,3},"angle_Kp_pim");
-    auto h_angle_Kp_pip = df1.Histo1D({"h_angle_Kp_pip","h_angle_Kp_pip",20,0,3},"angle_Kp_pip");
-    auto h_angle_pip_pm = df1.Histo1D({"h_angle_pip_pm","h_angle_pip_pm",20,0,3},"angle_pip_pm");
-    auto h_angle_pip_Km = df1.Histo1D({"h_angle_pip_Km","h_angle_pip_Km",20,0,3},"angle_pip_Km");
-    auto h_angle_pip_pim = df1.Histo1D({"h_angle_pip_pim","h_angle_pip_pim",20,0,3},"angle_pip_pim");
-    auto h_angle_pim_pm = df1.Histo1D({"h_angle_pim_pm","h_angle_pim_pm",20,0,3},"angle_pim_pm");
-    auto h_angle_pim_Km = df1.Histo1D({"h_angle_pim_Km","h_angle_pim_Km",20,0,3},"angle_pim_Km");
-    auto h_angle_Km_pm = df1.Histo1D({"h_angle_Km_pm","h_angle_Km_pm",20,0,3},"angle_Km_pm");
+    auto h_angle_pp_pm = df1.Histo1D({"h_angle_pp_pm","h_angle_pp_pm",20,0,0.3},"angle_pp_pm");
+    auto h_angle_pp_Km = df1.Histo1D({"h_angle_pp_Km","h_angle_pp_Km",20,0,0.3},"angle_pp_Km");
+    auto h_angle_pp_pim = df1.Histo1D({"h_angle_pp_pim","h_angle_pp_pim",20,0,0.3},"angle_pp_pim");
+    auto h_angle_pp_pip = df1.Histo1D({"h_angle_pp_pip","h_angle_pp_pip",20,0,0.3},"angle_pp_pip");
+    auto h_angle_pp_Kp = df1.Histo1D({"h_angle_pp_Kp","h_angle_pp_Kp",20,0,0.3},"angle_pp_Kp");
+    auto h_angle_Kp_pm = df1.Histo1D({"h_angle_Kp_pm","h_angle_Kp_pm",20,0,0.3},"angle_Kp_pm");
+    auto h_angle_Kp_Km = df1.Histo1D({"h_angle_Kp_Km","h_angle_Kp_Km",20,0,0.3},"angle_Kp_Km");
+    auto h_angle_Kp_pim = df1.Histo1D({"h_angle_Kp_pim","h_angle_Kp_pim",20,0,0.3},"angle_Kp_pim");
+    auto h_angle_Kp_pip = df1.Histo1D({"h_angle_Kp_pip","h_angle_Kp_pip",20,0,0.3},"angle_Kp_pip");
+    auto h_angle_pip_pm = df1.Histo1D({"h_angle_pip_pm","h_angle_pip_pm",20,0,0.3},"angle_pip_pm");
+    auto h_angle_pip_Km = df1.Histo1D({"h_angle_pip_Km","h_angle_pip_Km",20,0,0.3},"angle_pip_Km");
+    auto h_angle_pip_pim = df1.Histo1D({"h_angle_pip_pim","h_angle_pip_pim",20,0,0.3},"angle_pip_pim");
+    auto h_angle_pim_pm = df1.Histo1D({"h_angle_pim_pm","h_angle_pim_pm",20,0,0.3},"angle_pim_pm");
+    auto h_angle_pim_Km = df1.Histo1D({"h_angle_pim_Km","h_angle_pim_Km",20,0,0.3},"angle_pim_Km");
+    auto h_angle_Km_pm = df1.Histo1D({"h_angle_Km_pm","h_angle_Km_pm",20,0,0.3},"angle_Km_pm");
 
     // now we create 3*15 canvas and draw each one
 
-    TCanvas *c1 = new TCanvas("c1","c1",4000,2000);
-    c1->Divide(5,3);
-    c1->cd(1);
+    TCanvas *c1 = new TCanvas("c1","c1",3000,4000);
+    
+    
+    // Create a TPad to hold the title
+    TPad *titlePad = new TPad("titlePad","titlePad",0,0.93,1,1);
+    titlePad->SetFillColor(0);
+    titlePad->SetBorderMode(0);
+    titlePad->SetBorderSize(0);
+    titlePad->SetGridx();
+    titlePad->SetGridy();
+    titlePad->Draw();
+
+    titlePad->cd();
+    // Create the TPaveText object and add it to the TPad
+    TPaveText *pt = new TPaveText(0,0,1,1,"brndc");
+    pt->AddText("Momentum angles between particles");
+    pt->SetTextAlign(22);
+    pt->SetFillStyle(0);
+    pt->SetBorderSize(0);
+    pt->SetTextSize(0.5);
+    pt->Draw();
+
+    c1->cd();
+    // Create the TPad for the histograms and divide it
+    TPad *histPad = new TPad("histPad","histPad",0,0,1,0.93);
+    histPad->SetFillColor(0);
+    histPad->SetBorderMode(0);
+    histPad->SetBorderSize(0);
+    histPad->SetGridx();
+    histPad->SetGridy();
+    histPad->Divide(3,5);
+    histPad->Draw();
+
+    lhcbStyle->SetTitleY(1.03); 
+    
+    // Draw the histograms
+    histPad->cd(1);
+    h_angle_pp_pm->SetTitle("#font[40]{p+ and p-}; Angle (radians); Entries");
     h_angle_pp_pm->Draw();
-    c1->cd(2);
+    histPad->cd(2);
+    h_angle_pp_Km->SetTitle("#font[40]{p+ and K-}; Angle (radians); Entries");
     h_angle_pp_Km->Draw();
-    c1->cd(3);
+    histPad->cd(3);
+    h_angle_pp_pim->SetTitle("#font[40]{p+ and pi-}; Angle (radians); Entries");
     h_angle_pp_pim->Draw();
-    c1->cd(4);
+    histPad->cd(4);
+    h_angle_pp_pip->SetTitle("#font[40]{p+ and pi+}; Angle (radians); Entries");
     h_angle_pp_pip->Draw();
-    c1->cd(5);
+    histPad->cd(5);
+    h_angle_pp_Kp->SetTitle("#font[40]{p+ and K+}; Angle (radians); Entries");
     h_angle_pp_Kp->Draw();
-    c1->cd(6);
+    histPad->cd(6);
+    h_angle_Kp_pm->SetTitle("#font[40]{K+ and p-}; Angle (radians); Entries");
     h_angle_Kp_pm->Draw();
-    c1->cd(7);
+    histPad->cd(7);
+    h_angle_Kp_Km->SetTitle("#font[40]{K+ and K-}; Angle (radians); Entries");
     h_angle_Kp_Km->Draw();
-    c1->cd(8);
+    histPad->cd(8);
+    h_angle_Kp_pim->SetTitle("#font[40]{K+ and pi-}; Angle (radians); Entries");
     h_angle_Kp_pim->Draw();
-    c1->cd(9);
+    histPad->cd(9);
+    h_angle_Kp_pip->SetTitle("#font[40]{K+ and pi+}; Angle (radians); Entries");
     h_angle_Kp_pip->Draw();
-    c1->cd(10);
+    histPad->cd(10);
+    h_angle_pip_pm->SetTitle("#font[40]{pi+ and p-}; Angle (radians); Entries");
     h_angle_pip_pm->Draw();
-    c1->cd(11);
+    histPad->cd(11);
+    h_angle_pip_Km->SetTitle("#font[40]{pi+ and K-}; Angle (radians); Entries");
     h_angle_pip_Km->Draw();
-    c1->cd(12);
+    histPad->cd(12);
+    h_angle_pip_pim->SetTitle("#font[40]{pi+ and pi-}; Angle (radians); Entries");
     h_angle_pip_pim->Draw();
-    c1->cd(13);
+    histPad->cd(13);
+    h_angle_pim_pm->SetTitle("#font[40]{pi- and p-}; Angle (radians); Entries");
     h_angle_pim_pm->Draw();
-    c1->cd(14);
+    histPad->cd(14);
+    h_angle_pim_Km->SetTitle("#font[40]{pi- and K-}; Angle (radians); Entries");
     h_angle_pim_Km->Draw();
-    c1->cd(15);
+    histPad->cd(15);
+    h_angle_Km_pm->SetTitle("#font[40]{K- and p-}; Angle (radians); Entries");
     h_angle_Km_pm->Draw();
 
     c1->SaveAs("angle_plots.png");
+
+    lhcbStyle->SetTitleY(1.01); 
+
+    // create a new TCanvas and draw histograms for the ones we cut on
+    TCanvas *c2 = new TCanvas("c2","c2",1800,500);
+    c2->Divide(5,1);
+    c2->cd(1);
+    h_angle_pp_pip->Draw();
+    c2->cd(2);
+    h_angle_pim_pm->Draw();
+    c2->cd(3);
+    h_angle_pp_Kp->Draw();
+    c2->cd(4);
+    h_angle_Km_pm->Draw();
+    c2->cd(5);
+    h_angle_Kp_pip->Draw();
+    c2->SaveAs("angle_plots_cut.png");
+
 
 };
 

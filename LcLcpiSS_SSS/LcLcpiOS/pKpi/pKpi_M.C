@@ -1,8 +1,8 @@
 void pKpi_M()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Thu Feb 16 17:35:02 2023) by ROOT version 6.14/04
-   TCanvas *c = new TCanvas("c", "c",190,213,650,450);
+//=========  (Fri Mar 24 22:11:24 2023) by ROOT version 6.14/04
+   TCanvas *c = new TCanvas("c", "c",0,0,650,450);
    gStyle->SetOptStat(0);
    c->SetHighLightColor(2);
    c->Range(0,0,1,1);
@@ -18,7 +18,7 @@ void pKpi_M()
    c->SetFrameLineWidth(2);
    c->SetFrameBorderMode(0);
    
-   TH1D *pKpi_M__1 = new TH1D("pKpi_M__1","#font[12]{pK#pi Invariant Mass plot (OS_Lambdacp)}",100,2170,2400);
+   TH1D *pKpi_M__1 = new TH1D("pKpi_M__1","#font[12]{pK#pi Invariant Mass plot with PID cuts}",100,2170,2400);
    pKpi_M__1->SetBinContent(3,48);
    pKpi_M__1->SetBinContent(4,163);
    pKpi_M__1->SetBinContent(5,179);
