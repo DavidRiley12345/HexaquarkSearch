@@ -13,7 +13,7 @@ r.gROOT.ForceStyle()
 currstyle = r.gROOT.GetStyle("lhcbStyle")
 currstyle.SetOptTitle(1)
 #currstyle.SetTitleW(0.)
-#currstyle.SetTitleH(0.1)
+currstyle.SetTitleH(0.08)
  
 
 #load file names into a string to be read into dataframe
@@ -28,10 +28,10 @@ df1 = df0.Define("Lambdacp_invMass", "sqrt(pow(Lambdacp_p_PE+Lambdacp_K_PE+Lambd
 #create histogram model and fill using the data from the desired column
 model_M_K_P = r.RDF.TH1DModel("{}".format(filename), "{}".format(filename), 100,2170.,2400.);
 
-h = df1.Histo1D(model_M_K_P, "Lambdacp_invMass");
+h = df1.Histo1D(model_M_K_P, "Lambdacm_M");
 
 hist=h.Clone();
-hist.SetTitle("#font[12]{#scale[1.5]{pK#pi Invariant Mass plot (OS_Lambdacp)}}")
+hist.SetTitle("#font[12]{pK#pi Invariant Mass plot #Lambda_{c}^{-}}")
 
 upperline = r.TLine(2300,0,2300,225000)
 upperline.SetLineStyle(2)
@@ -40,7 +40,7 @@ lowerline = r.TLine(2270,0,2270,225000)
 lowerline.SetLineStyle(2)
 
 hist.GetYaxis().SetTitle("#font[12]{candidates}")
-hist.GetXaxis().SetTitle("#font[12]{m(pK#pi)}[MeV]")
+hist.GetXaxis().SetTitle("#font[12]{m(p^{-}K^{+}#pi^{-})}[MeV]")
 hist.GetYaxis().SetTitleOffset(1.2) 
 c = r.TCanvas("c", "c", 1300, 900)
 c.SetLeftMargin(0.16)

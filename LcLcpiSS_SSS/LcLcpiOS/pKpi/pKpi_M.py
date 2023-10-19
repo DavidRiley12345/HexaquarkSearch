@@ -12,6 +12,7 @@ r.gROOT.ForceStyle()
 
 currstyle = r.gROOT.GetStyle("lhcbStyle")
 currstyle.SetOptTitle(1)
+currstyle.SetTitleH(0.08)
 
 #load file names into a string to be read into dataframe
 names = r.std.vector('string')()
@@ -34,7 +35,7 @@ model_M_K_P = r.RDF.TH1DModel("{}".format(filename), "{}".format(filename), 100,
 h = df4.Histo1D(model_M_K_P, "Lambdacp_invMass");
 
 hist=h.Clone();
-hist.SetTitle("#font[12]{pK#pi Invariant Mass plot (OS_Lambdacp)}")
+hist.SetTitle("#font[12]{pK#pi Invariant Mass plot with PID cuts}")
 
 upperline = r.TLine(2305,0,2305,225000)
 upperline.SetLineStyle(2)
